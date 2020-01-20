@@ -25,7 +25,7 @@
           <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
               <div class="weui-cell__bd">
-                <textarea class="weui-textarea" name="miaoshu" placeholder="请输入提醒内容" rows="3"></textarea>
+                <textarea class="weui-textarea" name="miaoshu" id="miaoshu" placeholder="请输入提醒内容" rows="3"></textarea>
               </div>
             </div>
             <div class="weui-cell">
@@ -52,7 +52,7 @@
             <div class="weui-cell">
               <div class="weui-cell__hd"><label for="name" class="weui-label">提醒方式</label></div>
               <div class="weui-cell__bd">
-                <input class="weui-input wego-input" name="function" id="function" type="text" value="">
+                <input class="weui-input wego-input" name="method" id="method" type="text" value="">
               </div>
             </div>
 
@@ -77,14 +77,14 @@
       items: [
         {
           title: "重要",
-          value: "1",
+          value: "001",
         },
         {
           title: "普通",
-          value: "2",
+          value: "002",
         }],
       onChange: function (d) {
-        if ($("#function").data("values") && $("#rank").data("values") && $("#number").data("values")) {
+        if ($("#method").data("values") && $("#rank").data("values") && $("#number").data("values")) {
           $('#showTooltips').removeClass('weui-btn_disabled');
         } else {
           $('#showTooltips').addClass('weui-btn_disabled');
@@ -104,23 +104,23 @@
         }
       ],
       onChange: function (d) {
-        if ($("#function").data("values") && $("#rank").data("values") && $("#number").data("values")) {
+        if ($("#method").data("values") && $("#rank").data("values") && $("#number").data("values")) {
           $('#showTooltips').removeClass('weui-btn_disabled');
         } else {
           $('#showTooltips').addClass('weui-btn_disabled');
         }
       },
     });
-    $("#function").select({
+    $("#method").select({
       title: "请选择方式",
       items: [
         {
           title: "短信+微信",
-          value: "1",
+          value: "001",
         }
       ],
       onChange: function (d) {
-        if ($("#function").data("values") && $("#rank").data("values") && $("#number").data("values")) {
+        if ($("#method").data("values") && $("#rank").data("values") && $("#number").data("values")) {
           $('#showTooltips').removeClass('weui-btn_disabled');
         } else {
           $('#showTooltips').addClass('weui-btn_disabled');
@@ -130,10 +130,9 @@
 
     $("#showTooltips").on("click", function () {
       if ($(this).hasClass('weui-btn_disabled')) return;
-      console.log($("form").serializeArray());
       $.ajax({
-                  url:"/plugin/msg_borad/do/addmsg.html",//提交地址
-                  data:$("form").serialize(),//将表单数据序列化
+                  url:"/addmsg.html",//提交地址
+                  data:{ rank:$("#rank").data("values"), number:$("#number").data("values"),method:$("#method").data("values"),miaoshu:$("#miaoshu").val(),time:$("#datetime-picker").val() },//将表单数据序列化
                   type:"POST",
                   dataType:"json",
                   success:function(result){
