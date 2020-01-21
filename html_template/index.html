@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>创建提醒-wechatGo</title>
+  <link rel="stylesheet" href="css/weui.min.css">
+  <link rel="stylesheet" href="css/jquery-weui.min.css">
+  <link rel="stylesheet" href="css/css.css">
+
+</head>
+
+<body>
+  <form action="">
+    <div class="weui-form">
+      <div class="weui-form__text-area">
+        <h2 class="weui-form__title">创建提醒</h2>
+        <div class="weui-form__desc">描述提醒</div>
+      </div>
+      <div class="weui-form__control-area">
+        <div class="weui-cells__group weui-cells__group_form">
+          <div class="weui-cells__title">提醒内容</div>
+          <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+              <div class="weui-cell__bd">
+                <textarea class="weui-textarea" name="miaoshu" id="miaoshu" placeholder="请输入提醒内容" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="weui-cell">
+              <div class="weui-cell__bd">
+                <div class="weui-cell__hd"><label for="name" class="weui-label">时间</label></div>
+                <div class="weui-cell__bd">
+                  <input class="weui-input wego-input" name="time" type="text" id='datetime-picker'
+                    required="required" />
+                </div>
+              </div>
+            </div>
+            <div class="weui-cell">
+              <div class="weui-cell__hd"><label for="name" class="weui-label">重要级别</label></div>
+              <div class="weui-cell__bd">
+                <input class="weui-input wego-input" name="rank" id="rank" type="text" value="">
+              </div>
+            </div>
+            <div class="weui-cell">
+              <div class="weui-cell__hd"><label for="name" class="weui-label">重复提醒</label></div>
+              <div class="weui-cell__bd">
+                <input class="weui-input wego-input" name="number" id="number" type="text" value="">
+              </div>
+            </div>
+            <div class="weui-cell">
+              <div class="weui-cell__hd"><label for="name" class="weui-label">提醒方式</label></div>
+              <div class="weui-cell__bd">
+                <input class="weui-input wego-input" name="method" id="method" type="text" value="">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div class="weui-form__opr-area">
+        <a class="weui-btn weui-btn_primary weui-btn_disabled" href="javascript:" id="showTooltips">确定</a>
+      </div>
+    </div>
+
+  </form>
+  <script src="js/jquery-2.1.4.js"></script>
+  <script src="js/jquery-weui.min.js"></script>
+  <script>
+    //日历日期初始
+    $("#datetime-picker").datetimePicker();
+
+    $("#rank").select({
+      title: "请选择级别",
+      items: [
+        {
+          title: "重要",
+          value: "001",
+        },
+        {
+          title: "普通",
+          value: "002",
+        }],
+      onChange: function (d) {
+        if ($("#method").data("values") && $("#rank").data("values") && $("#number").data("values")) {
+          $('#showTooltips').removeClass('weui-btn_disabled');
+        } else {
+          $('#showTooltips').addClass('weui-btn_disabled');
+        }
+      },
+    });
+    $("#number").select({
+      title: "请选择次数",
+      items: [
+        {
+          title: "提醒/一次",
+          value: "001",
+        },
+        {
+          title: "提醒/重复",
+          value: "002",
+        }
+      ],
+      onChange: function (d) {
+        if ($("#method").data("values") && $("#rank").data("values") && $("#number").data("values")) {
+          $('#showTooltips').removeClass('weui-btn_disabled');
+        } else {
+          $('#showTooltips').addClass('weui-btn_disabled');
+        }
+      },
+    });
+    $("#method").select({
+      title: "请选择方式",
+      items: [
+        {
+          title: "短信+微信",
+          value: "001",
+        }
+      ],
+      onChange: function (d) {
+        if ($("#method").data("values") && $("#rank").data("values") && $("#number").data("values")) {
+          $('#showTooltips').removeClass('weui-btn_disabled');
+        } else {
+          $('#showTooltips').addClass('weui-btn_disabled');
+        }
+      },
+    });
+
+    $("#showTooltips").on("click", function () {
+      if ($(this).hasClass('weui-btn_disabled')) return;
+      $.ajax({
+                  url:"/addmsg.html",//提交地址
+                  data:{ rank:$("#rank").data("values"), number:$("#number").data("values"),method:$("#method").data("values"),miaoshu:$("#miaoshu").val(),time:$("#datetime-picker").val() },//将表单数据序列化
+                  type:"POST",
+                  dataType:"json",
+                  success:function(result){
+                      if (result.code == 0){
+                        $.toast("操作成功");
+                      }else{
+                        $.toast("操作失败", "cancel");
+                      }
+                  }
+              });
+      
+    })
+  </script>
+</body>
+
+</html>
