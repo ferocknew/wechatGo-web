@@ -10,3 +10,11 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+
+
+function getValue($arr = [], $key = '', $default = '')
+{
+    $returnData = null;
+    $returnData = isset($arr[$key]) ? $arr[$key] : $default;
+    return $returnData;
+}

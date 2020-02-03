@@ -20,6 +20,7 @@ class Base extends Controller
 
     public function _initialize()
     {
+        // echo "Base -- index";
 //        self::$m = config("config.environment");
 //        switch (self::$m) {
 //            case "dev":
@@ -34,9 +35,9 @@ class Base extends Controller
 //
 //        $moduleName = request()->module();
 //        Session::prefix($moduleName);
-//        self::$post = request()->post();
-//        self::$get = request()->get();
-//        self::$route = request()->route();
+        self::$post = request()->post();
+        self::$get = request()->get();
+        self::$route = request()->route();
 //        self::$session = session($moduleName);
 //
 //        $this->assign('static_v', config('staticVer.version'));

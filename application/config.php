@@ -9,7 +9,8 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-define("APP_NAME", "tp.hk.6do.me");
+define("APP_NAME", "golang:");
+define("TOKEN", "28w4R4GNbmiD993A");
 
 return [
     // +----------------------------------------------------------------------
@@ -17,9 +18,9 @@ return [
     // +----------------------------------------------------------------------
 
     // 应用调试模式
-    'app_debug' => false,
+    'app_debug' => 1,
     // 应用Trace
-    'app_trace' => 1,
+    'app_trace' => 0,
     // 应用模式状态
     'app_status' => '',
     // 是否支持多模块
@@ -174,10 +175,10 @@ return [
         // 日志保存目录
         'path' => LOG_PATH,
         // 日志记录级别，使用数组表示
-        'level' => ['error', 'log', 'curl', 'log', 'sql'],
+        'level' => ['error', 'log', 'curl', 'sql', 'info'],
         // 'level' => [],
         // error和sql日志单独记录
-        'apart_level' => ['error', 'sql', 'curl']
+        'apart_level' => ['error', 'sql', 'curl', 'info', 'log']
     ],
 
     // +----------------------------------------------------------------------
