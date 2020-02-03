@@ -21,29 +21,29 @@ class Base extends Controller
     public function _initialize()
     {
         // echo "Base -- index";
-//        self::$m = config("config.environment");
-//        switch (self::$m) {
-//            case "dev":
-//                self::$c = config("config.dev");
-//                break;
-//            case "pro":
-//                self::$c = config("config.pro");
-//                break;
-//        }
-//        self::$cm = config("common");
-//
-//
-//        $moduleName = request()->module();
-//        Session::prefix($moduleName);
+        self::$m = config("config.environment");
+        switch (self::$m) {
+            case "dev":
+                self::$c = config("config.dev");
+                break;
+            case "pro":
+                self::$c = config("config.pro");
+                break;
+        }
+        self::$cm = config("common");
+
+
+        $moduleName = request()->module();
+        Session::prefix($moduleName);
         self::$post = request()->post();
         self::$get = request()->get();
         self::$route = request()->route();
-//        self::$session = session($moduleName);
+        self::$session = session($moduleName);
+
+        $this->assign('static_v', config('staticVer.version'));
 //
-//        $this->assign('static_v', config('staticVer.version'));
-//
-//        $cdn = self::$c['CDN'];
-//        $this->assign('cdn1', $cdn[0]);
+        $cdn = self::$c['CDN'];
+        $this->assign('cdn1', $cdn[0]);
     }
 
     public function getRedis()
