@@ -21,13 +21,13 @@ class Base extends Controller
     public function _initialize()
     {
         // echo "Base -- index";
-        self::$m = config("config.environment");
+        self::$m = config("environment.value");
         switch (self::$m) {
             case "dev":
-                self::$c = config("config.dev");
+                self::$c = config("configDEV");
                 break;
             case "pro":
-                self::$c = config("config.pro");
+                self::$c = config("configPRO");
                 break;
         }
         self::$cm = config("common");
@@ -43,7 +43,7 @@ class Base extends Controller
         $this->assign('static_v', config('staticVer.version'));
 //
         $cdn = self::$c['CDN'];
-        $this->assign('cdn1', $cdn[0]);
+        $this->assign('cdn', $cdn[0]);
     }
 
     public function getRedis()

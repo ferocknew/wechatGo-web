@@ -13,4 +13,4 @@ return [
      * test 是测试环境
      * pro  是生产环境
      */
-    "environment" => "dev"];
+    "value" => "dev"];
