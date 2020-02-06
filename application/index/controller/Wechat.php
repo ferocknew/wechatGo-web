@@ -2,16 +2,20 @@
 
 namespace app\index\controller;
 
+use EasyWeChat\Factory;
 
 class Wechat extends Base
 {
     private $checkFlag = false;
+
+    private $config;
 
     public function _initialize()
     {
         parent::_initialize();
         $this->checkFlag = $this->checkSignature();
         // trace(['$getCheck' => $this->checkFlag]);
+        $this->config = config('wechat');
     }
 
     /**
@@ -65,5 +69,63 @@ class Wechat extends Base
         } else {
             return false;
         }
+    }
+
+    public function getOpenId()
+    {
+        $this->oauth();
+    }
+
+
+    public function oauth()
+    {
+        $request = \think\Request::instance();
+
+        $this->config['oauth'] = [
+            'scopes'   => ['snsapi_userinfo'],
+            'callback' => $request->domain().'/index/Wechat/oauthCallback',
+        ];
+
+        $app = Factory::officialAccount($this->config);
+        $oauth = $app->oauth;
+
+        $oauth->redirect()->send();
+
+    }
+
+    public  function oauthCallback()
+    {
+        $app = Factory::officialAccount($this->config);
+        $oauth = $app->oauth;
+        $user = $oauth->user();
+
+        $modelUserInfo = model('UserInfo');
+        $userInfo = $modelUserInfo->where('open_id', $user->getId())
+            ->find();
+        if ($userInfo == null) {
+            $modelUserInfo->open_id     = $user->getId();
+            $modelUserInfo->wx_nickname = $user->getNickname();
+            $modelUserInfo->user_avatar = $user->getAvatar();
+            $modelUserInfo->wx_appid    = $this->config['app_id'];
+            $modelUserInfo->save();
+        }else{
+            $modelUserInfo->wx_nickname = $user->getNickname();
+            $modelUserInfo->user_avatar = $user->getAvatar();
+            $modelUserInfo->wx_appid    = $this->config['app_id'];
+            $modelUserInfo->save();
+        }
+
+        $data = [
+            'wxAppid'      => $this->config['app_id'],
+            'openId'       => $user->getId(),
+            'wxNickname'   => $user->getNickname(),
+            'userAvatar'   => $user->getAvatar(),
+        ];
+
+        session('wx', $data);
+
+        $request = \think\Request::instance();
+
+        header('location:'. $request->domain());
     }
 }

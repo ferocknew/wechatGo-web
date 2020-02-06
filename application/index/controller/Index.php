@@ -13,6 +13,8 @@ class Index extends Base
 
     public function index()
     {
+        $this->wxLogin();
+
         return $this->fetch('index');
     }
 }
