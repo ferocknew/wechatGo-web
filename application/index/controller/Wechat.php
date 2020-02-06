@@ -82,8 +82,8 @@ class Wechat extends Base
         $request = \think\Request::instance();
 
         $this->config['oauth'] = [
-            'scopes'   => ['snsapi_userinfo'],
-            'callback' => $request->domain().'/index/Wechat/oauthCallback',
+            'scopes' => ['snsapi_userinfo'],
+            'callback' => $request->domain() . '/index/Wechat/oauthCallback',
         ];
 
         $app = Factory::officialAccount($this->config);
@@ -93,7 +93,7 @@ class Wechat extends Base
 
     }
 
-    public  function oauthCallback()
+    public function oauthCallback()
     {
         $app = Factory::officialAccount($this->config);
         $oauth = $app->oauth;
@@ -103,29 +103,29 @@ class Wechat extends Base
         $userInfo = $modelUserInfo->where('open_id', $user->getId())
             ->find();
         if ($userInfo == null) {
-            $modelUserInfo->open_id     = $user->getId();
+            $modelUserInfo->open_id = $user->getId();
             $modelUserInfo->wx_nickname = $user->getNickname();
             $modelUserInfo->user_avatar = $user->getAvatar();
-            $modelUserInfo->wx_appid    = $this->config['app_id'];
+            $modelUserInfo->wx_appid = $this->config['app_id'];
             $modelUserInfo->save();
-        }else{
+        } else {
             $modelUserInfo->wx_nickname = $user->getNickname();
             $modelUserInfo->user_avatar = $user->getAvatar();
-            $modelUserInfo->wx_appid    = $this->config['app_id'];
+            $modelUserInfo->wx_appid = $this->config['app_id'];
             $modelUserInfo->save();
         }
 
         $data = [
-            'wxAppid'      => $this->config['app_id'],
-            'openId'       => $user->getId(),
-            'wxNickname'   => $user->getNickname(),
-            'userAvatar'   => $user->getAvatar(),
+            'wxAppid' => $this->config['app_id'],
+            'openId' => $user->getId(),
+            'wxNickname' => $user->getNickname(),
+            'userAvatar' => $user->getAvatar(),
         ];
 
         session('wx', $data);
 
         $request = \think\Request::instance();
 
-        header('location:'. $request->domain());
+        header('location:' . $request->domain());
     }
 }
