@@ -6,11 +6,24 @@ use think\Model;
 
 class Base extends Model
 {
-    public static $mydb = null, $cm = [];
+    protected static $c = null;
+    protected static $cm = null;
+    protected static $m = null;
+    protected static $mydb = null;
 
     public static function init()
     {
         // self::$bcLength = config('base.bcLength');
+        self::$m = config("environment.value");
+        switch (self::$m) {
+            case "dev":
+                self::$c = config("configDEV");
+                break;
+            case "pro":
+                self::$c = config("configPRO");
+                break;
+        }
+
         self::$cm = config("common");
         bcscale(self::$cm['bcLength']);
 
