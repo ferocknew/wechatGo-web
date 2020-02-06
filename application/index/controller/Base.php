@@ -70,55 +70,5 @@ class Base extends Controller
         return $redisKeyName;
     }
 
-    protected function getPushMsgConfig()
-    {
-        $c = Config::parse(APP_PATH . "extra/" . config("config.environment") . "/pushMsgImg.json", 'json', 'pushMsgImg');
-
-        return $c;
-    }
-
-    protected function getUserInfo_Base($openId = '')
-    {
-        $modelUser = model('User');
-        $modelUserFromDb = $modelUser->getUserInfoFromDb(['openId' => $openId]);
-        return $modelUserFromDb;
-    }
-
-    protected function wxLogin()
-    {
-        if (!empty(session('wx.gameInfo')))
-            return session('wx.gameInfo');
-
-        $weChat = controller('Wechat');
-        $wx = session('wx');
-        $openId = isset($wx['openId']) ? $wx['openId'] : '';
-        if (empty($openId)) {
-            $openId = $weChat->getOpenId();
-        }
-
-        if (empty($openId)) {
-            $this->success('请先关注公众号...', self::$cm['weChatHomeUrl']);
-            return '';
-        }
-
-        $modelUser = model('User');
-        $wxUserInfo = $weChat->getUserInfo($openId);
-
-        $modelUserFromDb = $modelUser->getUserInfoFromDb(['openId' => $openId]);
-        if (!is_array($modelUserFromDb)) {
-            $this->success('请先关注公众号...', self::$cm['weChatHomeUrl']);
-
-            return '';
-        }
-
-        $modelUser = is_array($modelUserFromDb) ? array_merge($wxUserInfo, $modelUserFromDb) : $wxUserInfo;
-        $modelUser['headimgurl'] = str_replace('http', 'https', $modelUser['headimgurl']);
-
-        // halt([$wxUserInfo, $modelUserFromDb, session('wx')]);
-        session('wx.gameInfo', $modelUser);
-        return session('wx.gameInfo');
-
-    }
-
 
 }
