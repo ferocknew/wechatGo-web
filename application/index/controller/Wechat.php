@@ -14,6 +14,10 @@ class Wechat extends Base
         // trace(['$getCheck' => $this->checkFlag]);
     }
 
+    /**
+     * 微信服务器验证
+     * @return mixed|string|null
+     */
     public function valid()
     {
         $checkFlag = $this->checkFlag;
@@ -24,6 +28,17 @@ class Wechat extends Base
 
         return '';
     }
+
+    /**
+     * 微信公众号菜单/按钮 操作
+     * @return mixed|string|null
+     */
+    public function updateMenu()
+    {
+
+        return '';
+    }
+
 
     public function index()
     {
