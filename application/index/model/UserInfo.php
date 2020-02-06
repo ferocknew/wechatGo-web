@@ -3,11 +3,15 @@
 
 namespace app\index\model;
 
-use think\Model;
 
-class UserInfo extends Model
+class UserInfo extends Base
 {
     protected $pk = 'id';
 
     protected $name = 'user_info';
+
+    public function test()
+    {
+        return null;
+    }
 }

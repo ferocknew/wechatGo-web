@@ -6,4 +6,4 @@
  * Time: 上午12:11
  */
 
-return [];
+return ['bcLength' => 6];

@@ -2,7 +2,9 @@
 
 namespace app\index\controller;
 
+use app\index\model\UserInfo;
 use EasyWeChat\Factory;
+use think\console\command\make\Model;
 
 class Wechat extends Base
 {
@@ -14,8 +16,9 @@ class Wechat extends Base
     {
         parent::_initialize();
         $this->checkFlag = $this->checkSignature();
-        // trace(['$getCheck' => $this->checkFlag]);
-        $this->config = config('wechat');
+        $this->config = \think\Config::parse(self::$configPath . 'WeChat.ini', 'ini')['wechat'];
+        trace(['config' => $this->config]);
+
     }
 
     /**
@@ -56,7 +59,7 @@ class Wechat extends Base
         $timestamp = getValue(self::$get, 'timestamp');
         $nonce = getValue(self::$get, 'nonce');
 
-        $token = TOKEN;
+        $token = $this->config['token'];
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode($tmpArr);
@@ -82,8 +85,8 @@ class Wechat extends Base
         $request = \think\Request::instance();
 
         $this->config['oauth'] = [
-            'scopes'   => ['snsapi_userinfo'],
-            'callback' => $request->domain().'/index/Wechat/oauthCallback',
+            'scopes' => ['snsapi_userinfo'],
+            'callback' => $request->domain() . '/index/Wechat/oauthCallback',
         ];
 
         $app = Factory::officialAccount($this->config);
@@ -93,7 +96,7 @@ class Wechat extends Base
 
     }
 
-    public  function oauthCallback()
+    public function oauthCallback()
     {
         $app = Factory::officialAccount($this->config);
         $oauth = $app->oauth;
@@ -103,29 +106,35 @@ class Wechat extends Base
         $userInfo = $modelUserInfo->where('open_id', $user->getId())
             ->find();
         if ($userInfo == null) {
-            $modelUserInfo->open_id     = $user->getId();
+            $modelUserInfo->open_id = $user->getId();
             $modelUserInfo->wx_nickname = $user->getNickname();
             $modelUserInfo->user_avatar = $user->getAvatar();
-            $modelUserInfo->wx_appid    = $this->config['app_id'];
+            $modelUserInfo->wx_appid = $this->config['app_id'];
             $modelUserInfo->save();
-        }else{
+        } else {
             $modelUserInfo->wx_nickname = $user->getNickname();
             $modelUserInfo->user_avatar = $user->getAvatar();
-            $modelUserInfo->wx_appid    = $this->config['app_id'];
+            $modelUserInfo->wx_appid = $this->config['app_id'];
             $modelUserInfo->save();
         }
 
         $data = [
-            'wxAppid'      => $this->config['app_id'],
-            'openId'       => $user->getId(),
-            'wxNickname'   => $user->getNickname(),
-            'userAvatar'   => $user->getAvatar(),
+            'wxAppid' => $this->config['app_id'],
+            'openId' => $user->getId(),
+            'wxNickname' => $user->getNickname(),
+            'userAvatar' => $user->getAvatar(),
         ];
 
         session('wx', $data);
 
         $request = \think\Request::instance();
 
-        header('location:'. $request->domain());
+        header('location:' . $request->domain());
+    }
+
+    public function test()
+    {
+        $modelUserInfo = new UserInfo;
+        $modelUserInfo->test();
     }
 }

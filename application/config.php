@@ -254,9 +254,9 @@ return [
     // | Wechat
     // +----------------------------------------------------------------------
     'wechat' => [
-        'app_id'  => 'wxf4a768101e6ebeaf',                   // AppID
-        'secret'  => '',     // AppSecret
-        'token'   => 'your-token',          // Token
+        'app_id' => 'wxf4a768101e6ebeaf',                   // AppID
+        'secret' => '',     // AppSecret
+        'token' => 'your-token',          // Token
         'response_type' => 'array',
     ]
 
