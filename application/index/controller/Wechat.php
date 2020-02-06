@@ -2,7 +2,9 @@
 
 namespace app\index\controller;
 
+use app\index\model\UserInfo;
 use EasyWeChat\Factory;
+use think\console\command\make\Model;
 
 class Wechat extends Base
 {
@@ -14,8 +16,9 @@ class Wechat extends Base
     {
         parent::_initialize();
         $this->checkFlag = $this->checkSignature();
-        // trace(['$getCheck' => $this->checkFlag]);
-        $this->config = config('wechat');
+        $this->config = \think\Config::parse(self::$configPath . 'WeChat.ini', 'ini')['wechat'];
+        trace(['config' => $this->config]);
+
     }
 
     /**
@@ -56,7 +59,7 @@ class Wechat extends Base
         $timestamp = getValue(self::$get, 'timestamp');
         $nonce = getValue(self::$get, 'nonce');
 
-        $token = TOKEN;
+        $token = $this->config['token'];
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode($tmpArr);
@@ -127,5 +130,11 @@ class Wechat extends Base
         $request = \think\Request::instance();
 
         header('location:' . $request->domain());
+    }
+
+    public function test()
+    {
+        $modelUserInfo = new UserInfo;
+        $modelUserInfo->test();
     }
 }

@@ -17,6 +17,7 @@ class Base extends Controller
     public static $cm = null;
     public static $m = null;
     private static $r = null;
+    protected static $configPath = '';
 
     public function _initialize()
     {
@@ -31,7 +32,7 @@ class Base extends Controller
                 break;
         }
         self::$cm = config("common");
-
+        self::$configPath = CONF_PATH . DS . 'extra' . DS . self::$m . DS;
 
         $moduleName = request()->module();
         Session::prefix($moduleName);

@@ -25,7 +25,9 @@ class Base extends Model
         }
 
         self::$cm = config("common");
-        bcscale(self::$cm['bcLength']);
+        $dbConfig = \think\Config::parse(CONF_PATH . DS . 'extra' . DS . self::$m . DS . 'database.ini', 'ini')['database'];
+        \bcscale(self::$cm['bcLength']);
+        trace(['$dbConfig' => $dbConfig]);
 
         // 暂时不使用数据库
         // self::$mydb = Db::connect([
