@@ -15,10 +15,10 @@ class Wechat extends Base
     public function _initialize()
     {
         parent::_initialize();
-        $this->checkFlag = $this->checkSignature();
         $this->config = \think\Config::parse(self::$configPath . 'WeChat.ini', 'ini')['wechat'];
         trace(['config' => $this->config]);
 
+        $this->checkFlag = $this->checkSignature();
     }
 
     /**
