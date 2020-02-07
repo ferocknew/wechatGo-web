@@ -1,1 +1,16 @@
-{}
+[
+    {
+	    "type": "view",
+	    "name": "首页",
+	    "url": "https://test1.sg.6do.me"
+    }, {
+	    "name": "菜单",
+	    "sub_button": [
+            {
+		        "type": "view",
+		        "name": "首页",
+		        "url": "https://test1.sg.6do.me"
+            }
+        ]
+    }
+]

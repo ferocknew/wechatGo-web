@@ -16,6 +16,8 @@ class Wechat extends Base
     {
         parent::_initialize();
         $this->config = \think\Config::parse(self::$configPath . 'WeChat.ini', 'ini')['wechat'];
+        $this->config['secret'] = $this->config['app_secret'];
+
         trace(['config' => $this->config]);
 
         $this->checkFlag = $this->checkSignature();
@@ -43,7 +45,21 @@ class Wechat extends Base
     public function updateMenu()
     {
 
-        return '';
+        $string = file_get_contents(self::$configPath . 'wecahtMenu.json');
+        $string = json_decode($string,true);
+
+        $app = Factory::officialAccount($this->config);
+
+        $result = $app->menu->delete();           // 删除全部菜单
+        if ($result['errcode'] !== 0) {
+            return $result['errmsg'];
+        }
+        $result = $app->menu->create($string);   // 设置新菜单
+        if ($result['errcode'] !== 0) {
+            return $result['errmsg'];
+        }
+
+        return 'success';
     }
 
 
@@ -101,31 +117,26 @@ class Wechat extends Base
         $app = Factory::officialAccount($this->config);
         $oauth = $app->oauth;
         $user = $oauth->user();
+        
+        trace($user->toArray());
 
-        $modelUserInfo = model('UserInfo');
-        $userInfo = $modelUserInfo->where('open_id', $user->getId())
-            ->find();
-        if ($userInfo == null) {
-            $modelUserInfo->open_id = $user->getId();
-            $modelUserInfo->wx_nickname = $user->getNickname();
-            $modelUserInfo->user_avatar = $user->getAvatar();
-            $modelUserInfo->wx_appid = $this->config['app_id'];
-            $modelUserInfo->save();
-        } else {
-            $modelUserInfo->wx_nickname = $user->getNickname();
-            $modelUserInfo->user_avatar = $user->getAvatar();
-            $modelUserInfo->wx_appid = $this->config['app_id'];
-            $modelUserInfo->save();
-        }
+        $modelUserInfo = new UserInfo;
+        $userInfo = $modelUserInfo->where('open_id', $user->getId())->find();
 
         $data = [
-            'wxAppid' => $this->config['app_id'],
-            'openId' => $user->getId(),
-            'wxNickname' => $user->getNickname(),
-            'userAvatar' => $user->getAvatar(),
+            'wx_appid'      => $this->config['app_id'],
+            'open_id'       => $user->getId(),
+            'wx_nickname'   => $user->getNickname(),
+            'user_avatar'   => $user->getAvatar(),
         ];
 
-        session('wx', $data);
+        if ($userInfo == null) {
+            $userInfo->addUser($data);
+        } else {
+            $userInfo->updateUserInfo($data, $userInfo->id);
+        }
+
+        session('user', $data);
 
         $request = \think\Request::instance();
 

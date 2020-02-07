@@ -21,7 +21,6 @@ class Base extends Controller
 
     public function _initialize()
     {
-        // echo "Base -- index";
         self::$m = config("environment.value");
         switch (self::$m) {
             case "dev":
@@ -71,5 +70,12 @@ class Base extends Controller
         return $redisKeyName;
     }
 
-
+    public function checkWxAuto()
+    {
+        $user = session('user');
+        if (empty($user)){
+            $Wechat = controller('Wechat');
+            $Wechat->oauth();
+        }
+    }
 }
