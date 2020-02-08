@@ -70,12 +70,12 @@ class Base extends Controller
         return $redisKeyName;
     }
 
-    public function checkWxAuto()
-    {
-        $user = session('user');
-        if (empty($user)){
-            $Wechat = controller('Wechat');
-            $Wechat->oauth();
-        }
-    }
+//    public function checkWxAuto()
+//    {
+//        $user = session('user');
+//        if (empty($user)){
+//            $Wechat = controller('Wechat');
+//            $Wechat->oauth();
+//        }
+//    }
 }
