@@ -46,7 +46,7 @@ class Wechat extends Base
     {
 
         $string = file_get_contents(self::$configPath . 'wecahtMenu.json');
-        $string = json_decode($string,true);
+        $string = json_decode($string, true);
 
         $app = Factory::officialAccount($this->config);
 
@@ -117,17 +117,18 @@ class Wechat extends Base
         $app = Factory::officialAccount($this->config);
         $oauth = $app->oauth;
         $user = $oauth->user();
-        
+
         trace($user->toArray());
 
         $modelUserInfo = new UserInfo;
+        // 这个逻辑也放到 model ，只需暴露一个fn 出来就行了，controller 不要放任何数据操作。
         $userInfo = $modelUserInfo->where('open_id', $user->getId())->find();
 
         $data = [
-            'wx_appid'      => $this->config['app_id'],
-            'open_id'       => $user->getId(),
-            'wx_nickname'   => $user->getNickname(),
-            'user_avatar'   => $user->getAvatar(),
+            'wx_appid' => $this->config['app_id'],
+            'open_id' => $user->getId(),
+            'wx_nickname' => $user->getNickname(),
+            'user_avatar' => $user->getAvatar(),
         ];
 
         if ($userInfo == null) {
@@ -138,14 +139,14 @@ class Wechat extends Base
 
         session('user', $data);
 
-        $request = \think\Request::instance();
+        // $request = \think\Request::instance();
 
-        header('location:' . $request->domain());
+        header('location:' . request()->domain());
     }
 
     public function test()
     {
         $modelUserInfo = new UserInfo;
-        $modelUserInfo->test();
+        dump($modelUserInfo->getUserInfo('oFpU71WOVyyACGEBAwQehUkg5W3E'));
     }
 }
