@@ -31,30 +31,30 @@ class Base extends Model
         // dump($dbConfig);
 
         // 暂时不使用数据库
-        self::$mydb = \think\Db::connect([
-            // 数据库类型
-            'type' => 'mysql',
-            // 数据库连接DSN配置
-            'dsn' => '',
-            // 服务器地址
-            'hostname' => $dbConfig['hostname'],
-            // 数据库名
-            'database' => $dbConfig['database'],
-            // 数据库用户名
-            'username' => $dbConfig['username'],
-            // 数据库密码
-            'password' => $dbConfig['password'],
-            // 数据库连接端口
-            'hostport' => $dbConfig['hostport'],
-            // 数据库连接参数
-            'params' => [],
-            // 数据库编码默认采用utf8
-            'charset' => 'utf8',
-            // 数据库表前缀
-            'prefix' => ''
-        ]);
+        if (self::$mydb == null)
+            self::$mydb = \think\Db::connect([
+                // 数据库类型
+                'type' => 'mysql',
+                // 数据库连接DSN配置
+                'dsn' => '',
+                // 服务器地址
+                'hostname' => $dbConfig['hostname'],
+                // 数据库名
+                'database' => $dbConfig['database'],
+                // 数据库用户名
+                'username' => $dbConfig['username'],
+                // 数据库密码
+                'password' => $dbConfig['password'],
+                // 数据库连接端口
+                'hostport' => $dbConfig['hostport'],
+                // 数据库连接参数
+                'params' => [],
+                // 数据库编码默认采用utf8
+                'charset' => 'utf8',
+                // 数据库表前缀
+                'prefix' => ''
+            ]);
 
     }
-
 
 }
