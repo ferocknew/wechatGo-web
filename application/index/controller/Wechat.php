@@ -147,6 +147,6 @@ class Wechat extends Base
     public function test()
     {
         $modelUserInfo = new UserInfo;
-        $modelUserInfo->test();
+        dump($modelUserInfo->getUserInfo('oFpU71WOVyyACGEBAwQehUkg5W3E'));
     }
 }
