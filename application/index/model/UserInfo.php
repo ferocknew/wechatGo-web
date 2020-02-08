@@ -10,8 +10,13 @@ class UserInfo extends Base
 
     protected $name = 'user_info';
 
-    public function test()
+    public function addUser($data)
     {
-        return null;
+        return $this->allowField(['open_id', 'wx_nickname', 'user_avatar', 'wx_appid'])->save($data);
+    }
+
+    public function updateUserInfo($data, $id)
+    {
+        return $this->allowField(['wx_nickname', 'user_avatar', 'wx_appid'])->save($data, ['id' => $id]);
     }
 }
