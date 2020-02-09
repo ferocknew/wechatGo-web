@@ -63,6 +63,8 @@ class Wechat extends Base
     }
 
     /**
+     * // 这个方法有问题，会报错，需要修正
+     *
      * 微信公众号菜单/按钮 操作
      * @return mixed|string|null
      */
