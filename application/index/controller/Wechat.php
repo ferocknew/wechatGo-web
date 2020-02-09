@@ -70,6 +70,9 @@ class Wechat extends Base
      */
     public function wechatMenu()
     {
+        // bug 修复以后再把这行注释掉。
+        return '';
+
         $app = Factory::officialAccount($this->config);
         // 全部菜单
         $list = $app->menu->list();
