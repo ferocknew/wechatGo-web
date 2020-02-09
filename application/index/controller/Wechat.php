@@ -90,15 +90,17 @@ class Wechat extends Base
                 if ($level == 'first') {
                     $num += 1;
                     $buttons[] = $value;
-                }else{
+                } else {
                     $buttons[$num]['sub_button'][] = $value;
                 }
             }
             $result = $app->menu->create($buttons);   // 设置新菜单
             return $result['errcode'] == 0 ? 'success' : $result['errmsg'];
         }
+        $menuList = getValue($list, 'menu', []);
+
         $this->assign('typeArr', $type);
-        $this->assign('list', $list['menu']);
+        $this->assign('list', $menuList);
         return $this->fetch('menu');
     }
 
