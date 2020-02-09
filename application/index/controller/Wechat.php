@@ -100,10 +100,12 @@ class Wechat extends Base
             $result = $app->menu->create($buttons);   // 设置新菜单
             return $result['errcode'] == 0 ? 'success' : $result['errmsg'];
         }
-        $menuList = isset($list['menu']['button']) && $list['menu']['button'] ? $list['menu']['button'] : [];
-        $this->assign('menuPwd', $menuPwd);
-        $this->assign('typeArr', $type);
-        $this->assign('list', $menuList);
+        $menuList = isset($list['menu']) ? getValue($list['menu'], 'button', []) : [];
+        $this->assign([
+            'menuPwd'  => $menuPwd,
+            'typeArr'  => $type,
+            'list'  => $menuList,
+        ]);
         return $this->fetch('menu');
     }
 
