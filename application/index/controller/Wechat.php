@@ -62,6 +62,53 @@ class Wechat extends Base
         return 'success';
     }
 
+    /**
+     * // 这个方法有问题，会报错，需要修正
+     *
+     * 微信公众号菜单/按钮 操作
+     * @return mixed|string|null
+     */
+    public function wechatMenu()
+    {
+        // bug 修复以后再把这行注释掉。
+        return '';
+
+        $app = Factory::officialAccount($this->config);
+        // 全部菜单
+        $list = $app->menu->list();
+        $type = config("configMENU.menu_type");
+        if (request()->isPost()) {
+            $param = request()->param();
+            $comArr = [];
+            $levelArr = $param['level'];
+            foreach ($levelArr as $key => $value) {
+                foreach ($param as $k => $v) {
+                    $comArr[$key][$k] = $v[$key];
+                }
+                $comArr[$key] = array_filter($comArr[$key]);
+            }
+            $buttons = [];
+            $num = -1;
+            foreach ($comArr as $key => $value) {
+                $level = $value['level'];
+                unset($value['level']);
+                if ($level == 'first') {
+                    $num += 1;
+                    $buttons[] = $value;
+                } else {
+                    $buttons[$num]['sub_button'][] = $value;
+                }
+            }
+            $result = $app->menu->create($buttons);   // 设置新菜单
+            return $result['errcode'] == 0 ? 'success' : $result['errmsg'];
+        }
+        $menuList = getValue($list, 'menu', []);
+
+        $this->assign('typeArr', $type);
+        $this->assign('list', $menuList);
+        return $this->fetch('menu');
+    }
+
 
     public function index()
     {

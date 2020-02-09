@@ -10,7 +10,6 @@
 // +----------------------------------------------------------------------
 
 define("APP_NAME", "golang:");
-define("TOKEN", "28w4R4GNbmiD993A");
 
 return [
     // +----------------------------------------------------------------------
@@ -195,7 +194,8 @@ return [
 
     'cache' => [
         // 驱动方式
-        'type' => 'memcache',
+        // 'type' => 'memcache',
+        'type' => 'file',
         // 缓存保存目录
         'path' => CACHE_PATH,
         // 缓存前缀
@@ -216,7 +216,8 @@ return [
         // SESSION 前缀
         'prefix' => 'think',
         // 驱动方式 支持redis memcache memcached
-        'type' => 'memcache',
+        // 'type' => 'memcache',
+
         // 是否自动开启 SESSION
         'auto_start' => true,
         'expire' => 3600,
