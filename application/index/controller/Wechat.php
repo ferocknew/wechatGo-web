@@ -71,6 +71,16 @@ class Wechat extends Base
         $app = Factory::officialAccount($this->config);
         // 全部菜单
         $list = $app->menu->list();
+        // 菜单不存在设置默认菜单
+        if (isset($list['errcode'])) {
+            $string = file_get_contents(self::$configPath . 'wecahtMenu.json');
+            $menuDemo = json_decode($string, true);
+            $addRes = $app->menu->create($menuDemo);   // 设置默认菜单
+            if ($addRes['errcode'] !== 0) {
+                return $addRes['errmsg'];
+            }
+            $list = $app->menu->list();
+        }
         // 菜单类型
         $type = config("configMENU.menu_type");
         // 菜单验证码
@@ -98,12 +108,14 @@ class Wechat extends Base
                 }
             }
             $result = $app->menu->create($buttons);   // 设置新菜单
-            return $result['errcode'] == 0 ? 'success' : $result['errmsg'];
+            return $result['errcode'] === 0 ? 'success' : $result['errmsg'];
         }
         $menuList = getValue($list['menu'],'button',[]);
-        $this->assign('menuPwd', $menuPwd);
-        $this->assign('typeArr', $type);
-        $this->assign('list', $menuList);
+        $this->assign([
+            'menuPwd'  => $menuPwd,
+            'typeArr'  => $type,
+            'list'  => $menuList,
+        ]);
         return $this->fetch('menu');
     }
 
