@@ -90,19 +90,12 @@ class Wechat extends Base
         }
     }
 
-    public function getOpenId()
-    {
-        $this->oauth();
-    }
-
-
     public function oauth()
     {
-        $request = \think\Request::instance();
 
         $this->config['oauth'] = [
             'scopes' => ['snsapi_userinfo'],
-            'callback' => $request->domain() . '/index/Wechat/oauthCallback',
+            'callback' => request()->domain() . '/index/Wechat/oauthCallback',
         ];
 
         $app = Factory::officialAccount($this->config);
@@ -122,7 +115,7 @@ class Wechat extends Base
 
         $modelUserInfo = new UserInfo;
         // 这个逻辑也放到 model ，只需暴露一个fn 出来就行了，controller 不要放任何数据操作。
-        $userInfo = $modelUserInfo->where('open_id', $user->getId())->find();
+        $userInfo = $modelUserInfo->getUserInfo($user->getId());
 
         $data = [
             'wx_appid' => $this->config['app_id'],
@@ -139,8 +132,6 @@ class Wechat extends Base
 
         session('user', $data);
 
-        // $request = \think\Request::instance();
-
         header('location:' . request()->domain());
     }
 
@@ -148,5 +139,15 @@ class Wechat extends Base
     {
         $modelUserInfo = new UserInfo;
         dump($modelUserInfo->getUserInfo('oFpU71WOVyyACGEBAwQehUkg5W3E'));
+    }
+
+    public function server()
+    {
+        $app = Factory::officialAccount($this->config);
+
+        $response = $app->server->serve();
+
+        $response->send();exit; 
+        // return $response;
     }
 }
