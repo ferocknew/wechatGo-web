@@ -110,11 +110,11 @@ class Wechat extends Base
             $result = $app->menu->create($buttons);   // 设置新菜单
             return $result['errcode'] === 0 ? 'success' : $result['errmsg'];
         }
-        $menuList = getValue($list['menu'],'button',[]);
+        $menuList = getValue($list['menu'], 'button', []);
         $this->assign([
-            'menuPwd'  => $menuPwd,
-            'typeArr'  => $type,
-            'list'  => $menuList,
+            'menuPwd' => $menuPwd,
+            'typeArr' => $type,
+            'list' => $menuList,
         ]);
         return $this->fetch('menu');
     }
@@ -210,7 +210,7 @@ class Wechat extends Base
         if (empty($sessionValue)) {
             echo "存储 session";
             session("aaa", '123');
-        }else{
+        } else {
             echo "读取session";
             return $sessionValue;
         }
