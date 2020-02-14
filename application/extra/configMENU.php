@@ -20,4 +20,5 @@ return [
         'media_id' => '下发消息（除文本消息）',
         'view_limited' => '跳转图文消息URL',
     ],
+    'menu_pwd' => 'lyx32609',
 ];

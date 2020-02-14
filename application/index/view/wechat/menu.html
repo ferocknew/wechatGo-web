@@ -159,7 +159,7 @@
                                 </thead>
                                 <tbody id="dataBody">
 
-                                {volist name="list['button']" id="item" key="k" }
+                                {volist name="list" id="item" key="k" empty="暂时没有菜单"}
                                 <tr>
                                     <td>
                                         <a class="btn btn-xs btn-primary" onclick="addNew(this,1)">插入</a>
@@ -186,9 +186,7 @@
                                             <select class="form-control select2 form-type-select" name="type[]">
                                                 <option value="">无</option>
                                                 {foreach name="typeArr" item="type" key="tk"}
-                                                <option value="{$tk}" {if isset($item.type) && $item.type==
-                                                        $tk}selected{
-                                                /if}>{$type}</option>
+                                                <option value="{$tk}" {if isset($item.type) && $item.type== $tk}selected{/if}>{$type}</option>
                                                 {/foreach}
                                             </select>
                                         </label>
@@ -229,7 +227,7 @@
                                     </td>
                                 <tr>
 
-                                    {volist name="item['sub_button']" id="child"}
+                                    {volist name="item['sub_button']" id="child" }
                                 <tr>
                                     <td>
                                         <a class="btn btn-xs btn-primary" onclick="addNew(this,1)">插入</a>
@@ -256,9 +254,7 @@
                                             <select class="form-control select2 form-type-select" name="type[]">
                                                 <option value="">无</option>
                                                 {foreach name="typeArr" item="type" key="ctk"}
-                                                <option value="{$ctk}" {if isset($child.type) && $child.type==
-                                                        $ctk}selected{
-                                                /if}>{$type}</option>
+                                                <option value="{$ctk}" {if isset($child.type) && $child.type== $ctk}selected{/if}>{$type}</option>
                                                 {/foreach}
                                             </select>
                                         </label>
@@ -383,7 +379,30 @@
 
 
     </section>
-    <script>
+
+
+<script >
+         var index = layer.open({            //打开layer弹出框
+            type: 1,  
+            closeBtn :0,//不显示关闭按钮                   //类型
+            skin: "layui-layer-rim",     //皮肤类型，在skin文件夹中
+            area: ["300px", "200px"],    //范围大小
+            title: "验证码",               //定义标题
+            content: '<center><input type="password" name="password" id="password" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input"></center>',       //输出的字符串，定义弹出框的html页面
+            btn: ['确定'],　　　　//按钮
+            yes: function (index, layero) { //确定按钮的处理函数
+                if ($("#password").val() == '{$menuPwd}') {
+                    layer.msg("验证码正确")
+                    layer.close(index); 
+                }else{
+                    layer.msg("验证码错误")
+                    // parent.location.reload(); //刷新父页面
+                }
+            },
+            btn2: function (index, layero) { //取消按钮后的处理函数
+                layer.msg("验证码错误")
+            },
+        });
 
         //表单索引
         var formIndex = 0;
