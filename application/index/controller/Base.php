@@ -33,8 +33,11 @@ class Base extends Controller
         self::$cm = config("common");
         self::$configPath = CONF_PATH . DS . 'extra' . DS . self::$m . DS;
 
+        $sessionConfig = \think\Config::parse(self::$configPath . 'session_config.ini', 'ini')['session_config'];
+        $this->sessionInit($sessionConfig);
         $moduleName = request()->module();
         Session::prefix($moduleName);
+
         self::$post = request()->post();
         self::$get = request()->get();
         self::$route = request()->route();
@@ -70,12 +73,14 @@ class Base extends Controller
         return $redisKeyName;
     }
 
-//    public function checkWxAuto()
-//    {
-//        $user = session('user');
-//        if (empty($user)){
-//            $Wechat = controller('Wechat');
-//            $Wechat->oauth();
-//        }
-//    }
+    private function sessionInit($sessionConfig = [])
+    {
+        if (empty($sessionConfig)) {
+            throw new Exception("session config error!");
+            return false;
+        }
+
+        Session::init($sessionConfig);
+        return true;
+    }
 }
