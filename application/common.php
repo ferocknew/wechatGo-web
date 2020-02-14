@@ -18,3 +18,22 @@ function getValue($arr = [], $key = '', $default = '')
     $returnData = isset($arr[$key]) ? $arr[$key] : $default;
     return $returnData;
 }
+
+function checkAuth()
+{
+    if (empty(session('user'))) {
+        $wx = new app\index\controller\Wechat();
+        $wx->oauth();
+    }
+}
+
+function rtJson($code = 1, $msg = '', $data = [])
+{
+    return json(
+        [
+            'code' => $code,
+            'msg'  => $msg,
+            'data' => $code == 0 ? $data : [],
+        ]
+    );
+}

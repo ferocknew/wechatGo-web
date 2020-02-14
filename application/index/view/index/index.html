@@ -25,7 +25,7 @@
           <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
               <div class="weui-cell__bd">
-                <textarea class="weui-textarea" name="miaoshu" id="miaoshu" placeholder="请输入提醒内容" rows="3"></textarea>
+                <textarea class="weui-textarea" name="content" id="content" placeholder="请输入提醒内容" rows="3"></textarea>
               </div>
             </div>
             <div class="weui-cell">
@@ -131,15 +131,15 @@
     $("#showTooltips").on("click", function () {
       if ($(this).hasClass('weui-btn_disabled')) return;
       $.ajax({
-                  url:"/addmsg.html",//提交地址
-                  data:{ rank:$("#rank").data("values"), number:$("#number").data("values"),method:$("#method").data("values"),miaoshu:$("#miaoshu").val(),time:$("#datetime-picker").val() },//将表单数据序列化
+                  url:"index/Notify/add",//提交地址 , 应该有一个类似__ROOT__ 
+                  data:{ rank:$("#rank").data("values"), number:$("#number").data("values"),method:$("#method").data("values"),content:$("#content").val(),time:$("#datetime-picker").val() },//将表单数据序列化
                   type:"POST",
                   dataType:"json",
                   success:function(result){
                       if (result.code == 0){
                         $.toast("操作成功");
                       }else{
-                        $.toast("操作失败", "cancel");
+                        $.toast(result.msg, "cancel");
                       }
                   }
               });
