@@ -80,7 +80,7 @@ class Base extends Controller
     {
         if (empty($sessionConfig)) {
             throw new Exception("session config error!");
-            return false;
+            // return false;
         }
 
         Session::init($sessionConfig);
