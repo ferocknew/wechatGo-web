@@ -6,6 +6,7 @@ use app\index\model\UserInfo;
 use EasyWeChat\Factory;
 use think\console\command\make\Model;
 
+
 class Wechat extends Base
 {
     private $checkFlag = false;
@@ -170,8 +171,9 @@ class Wechat extends Base
 
     public function oauthCallback()
     {
+        $backUrl = empty(session("HTTP_REFERER")) ? request()->domain() : session("HTTP_REFERER");
         if (!empty(session('user')) || (!empty(self::$get['code']) && self::$get['code'] == session('wx_code'))) {
-            header('location:' . request()->domain());
+            header('location:' . $backUrl);
             die();
         }
 
@@ -205,26 +207,35 @@ class Wechat extends Base
         }
 
         session('user', $data);
-
-        $backUrl = empty(session("HTTP_REFERER")) ? request()->domain() : session("HTTP_REFERER");
         header('location:' . $backUrl);
     }
 
     public function test()
     {
-        $modelUserInfo = new UserInfo;
-        dump($modelUserInfo->getUserInfo('oFpU71WOVyyACGEBAwQehUkg5W3E'));
+//        $modelUserInfo = new UserInfo;
+//        dump($modelUserInfo->getUserInfo('oFpU71WOVyyACGEBAwQehUkg5W3E'));
+//
+//        $sessionValue = session("aaa");
+//        if (empty($sessionValue)) {
+//            echo "存储 session";
+//            session("aaa", '123');
+//        } else {
+//            echo "读取session";
+//            echo $sessionValue;
+//        }
 
-        $sessionValue = session("aaa");
-        if (empty($sessionValue)) {
-            echo "存储 session";
-            session("aaa", '123');
-        } else {
-            echo "读取session";
-            echo $sessionValue;
-        }
-
-        session("user", null);
+//        $app = Factory::officialAccount($this->config);
+//        $messageId = $app->template_message->send([
+//            'touser' => 'obzwp03B6KWplDY6IC3nR53jyNqg',
+//            'template_id' => 'sg_22LfXSUk1rsFvxmNSuYFRelLa4gmQCw46kWRAgrY',
+//            'url' => 'http://www.baidu.com',
+//            'data' => [
+//                'notify_content' => "测试内容，发送时间戳" . time()
+//            ],
+//        ]);
+////
+////
+//        dump($messageId);
 
         return;
     }
