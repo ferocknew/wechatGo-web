@@ -18,7 +18,7 @@ class Wechat extends Base
         $this->config = \think\Config::parse(self::$configPath . 'WeChat.ini', 'ini')['wechat'];
         $this->config['secret'] = $this->config['app_secret'];
 
-        trace(['config' => $this->config]);
+        // trace(['config' => $this->config]);
 
         $this->checkFlag = $this->checkSignature();
     }
@@ -148,8 +148,13 @@ class Wechat extends Base
         }
     }
 
-    public function oauth()
+    public function oauth($nowUri = '')
     {
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            session("HTTP_REFERER", $_SERVER['HTTP_REFERER']);
+        } else {
+            session("HTTP_REFERER", $nowUri);
+        }
 
         $this->config['oauth'] = [
             'scopes' => ['snsapi_userinfo'],
@@ -176,10 +181,12 @@ class Wechat extends Base
 
         session('wx_code', self::$get['code']);
 
-        trace($user->toArray());
+        // trace($user->toArray());
 
         $modelUserInfo = new UserInfo;
         $userInfo = $modelUserInfo->getUserInfo($user->getId());
+
+        // trace(['$userInfo' => $userInfo]);
 
         $data = [
             'user_id' => $userInfo['id'],
@@ -189,6 +196,8 @@ class Wechat extends Base
             'user_avatar' => $user->getAvatar(),
         ];
 
+        // trace(['$data' => $data]);
+
         if ($userInfo == null) {
             $modelUserInfo->addUser($data);
         } else {
@@ -197,7 +206,8 @@ class Wechat extends Base
 
         session('user', $data);
 
-        header('location:' . request()->domain());
+        $backUrl = empty(session("HTTP_REFERER")) ? request()->domain() : session("HTTP_REFERER");
+        header('location:' . $backUrl);
     }
 
     public function test()
@@ -213,6 +223,9 @@ class Wechat extends Base
             echo "读取session";
             echo $sessionValue;
         }
+
+        session("user", null);
+
         return;
     }
 
@@ -224,7 +237,7 @@ class Wechat extends Base
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
-//    public function server()
+//    public function server()url
 //    {
 //        $app = Factory::officialAccount($this->config);
 //

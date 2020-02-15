@@ -26,6 +26,8 @@ class Notify extends Base
                 return rtJson(1, $validate->getError());
             }
 
+            // trace(['session(\'user\')' => session('user')], 'info');
+
             $modelUserNotifyList = new UserNotifyList();
             $result = $modelUserNotifyList->add($data, session('user')['user_id']);
 
@@ -35,7 +37,7 @@ class Notify extends Base
 
             return rtJson(1, '创建提醒成功');
         } catch (\Throwable $th) {
-            trace('error: ' . $th->getMessage());
+            trace('error: ' . $th->getMessage(), 'error');
             return rtJson(1, '创建提醒失败');
         }
     }

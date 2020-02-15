@@ -49,7 +49,7 @@ class Base extends Controller
         self::$post = request()->post();
         self::$get = request()->get();
         self::$route = request()->route();
-        self::$session = session($moduleName);
+        // self::$session = session($moduleName);
 
         $this->assign('static_v', config('staticVer.version'));
 //

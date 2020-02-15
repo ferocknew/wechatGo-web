@@ -13,7 +13,8 @@ class Wechat extends Base
     {
         if (empty(session('user'))) {
             $wx = new \app\index\controller\Wechat();
-            $wx->oauth();
+            $nowUri = request()->url();
+            $wx->oauth($nowUri);
         }
 
         return;
