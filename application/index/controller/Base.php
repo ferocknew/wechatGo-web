@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use think\Controller;
+use think\Exception;
 use think\Session;
 use think\Config;
 
@@ -83,7 +84,11 @@ class Base extends Controller
             // return false;
         }
 
-        Session::init($sessionConfig);
+        try {
+            Session::init($sessionConfig);
+        } catch (Exception $e) {
+            trace(["Session Init error" => $e->getMessage()], "error");
+        }
         return true;
     }
 }
