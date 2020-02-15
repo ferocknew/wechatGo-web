@@ -19,10 +19,10 @@ class UserInfo extends Base
     public function addUser($data)
     {
         return self::$mydb->name('user_info')->insert([
-            'open_id'       => $data['open_id'],
-            'wx_nickname'   => $data['wx_nickname'],
-            'user_avatar'   => $data['user_avatar'],
-            'wx_appid'      => $data['wx_appid']
+            'open_id' => $data['open_id'],
+            'wx_nickname' => $data['wx_nickname'],
+            'user_avatar' => $data['user_avatar'],
+            'wx_appid' => $data['wx_appid']
         ]);
     }
 
@@ -31,9 +31,9 @@ class UserInfo extends Base
         return self::$mydb->name('user_info')
             ->where('id', $id)
             ->update([
-                'wx_nickname'   => $data['wx_nickname'],
-                'user_avatar'   => $data['user_avatar'],
-                'wx_appid'      => $data['wx_appid'],
+                'wx_nickname' => $data['wx_nickname'],
+                'user_avatar' => $data['user_avatar'],
+                'wx_appid' => $data['wx_appid'],
             ]);
     }
 
