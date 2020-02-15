@@ -35,4 +35,15 @@ class UserNotifyList extends Base
             'raw_creat_time' => date('Y-m-d H:i:s'),
         ]);
     }
+
+    public function getOneInfo($data, $user_id)
+    {
+        $where = [
+            'knock_time' => $data['knock_time'],
+            'user_id' => $user_id
+        ];
+        $res = self::$mydb->table('user_notify_list')->where($where)->find();
+        // trace($res);
+        return $res;
+    }
 }
