@@ -165,7 +165,8 @@ class Wechat extends Base
     public function oauthCallback()
     {
         if (!empty(session('user')) || (!empty(self::$get['code']) && self::$get['code'] == session('wx_code'))) {
-            header('location:' . request()->domain());die();
+            header('location:' . request()->domain());
+            die();
         }
 
         $app = Factory::officialAccount($this->config);
@@ -180,9 +181,9 @@ class Wechat extends Base
         $userInfo = $modelUserInfo->getUserInfo($user->getId());
 
         $data = [
-            'user_id'   => $userInfo['id'],
-            'wx_appid'  => $this->config['app_id'],
-            'open_id'   => $user->getId(),
+            'user_id' => $userInfo['id'],
+            'wx_appid' => $this->config['app_id'],
+            'open_id' => $user->getId(),
             'wx_nickname' => $user->getNickname(),
             'user_avatar' => $user->getAvatar(),
         ];
@@ -209,17 +210,26 @@ class Wechat extends Base
             session("aaa", '123');
         } else {
             echo "读取session";
-            return $sessionValue;
+            echo $sessionValue;
         }
-
+        return;
     }
-    // 微信服务器验证
-    public function server()
-    {
-        $app = Factory::officialAccount($this->config);
 
-        $response = $app->server->serve();
+    // 微信服务器验证 ??
 
-        $response->send();exit; 
-    }
+    /**
+     * 这个 fn  用来干嘛，上面不是有  valid() 了么？
+     * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+//    public function server()
+//    {
+//        $app = Factory::officialAccount($this->config);
+//
+//        $response = $app->server->serve();
+//
+//        $response->send();
+//        return;
+//    }
 }
