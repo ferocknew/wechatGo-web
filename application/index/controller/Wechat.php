@@ -107,7 +107,8 @@ class Wechat extends Base
                     $buttons[$num]['sub_button'][] = $value;
                 }
             }
-            $result = $app->menu->create($buttons);   // 设置新菜单
+            // 设置新菜单
+            $result = $app->menu->create($buttons);
             return $result['errcode'] === 0 ? 'success' : $result['errmsg'];
         }
         $menuList = getValue($list['menu'], 'button', []);
