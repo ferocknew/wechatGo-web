@@ -6,10 +6,13 @@ use app\index\model\UserNotifyList;
 
 class Notify extends Base
 {
+    private $eventWeChat = null;
+
     public function _initialize()
     {
         parent::_initialize();
-        checkAuth();
+        $this->eventWeChat = new \app\index\event\Wechat();
+        $this->eventWeChat->checkAuth();
     }
 
     public function add()
