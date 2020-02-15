@@ -19,6 +19,11 @@ class Base extends Controller
     private static $r = null;
     protected static $configPath = '';
 
+    /**
+     * @var bool
+     */
+    private static $sessionInitFlag = false;
+
     public function _initialize()
     {
         self::$m = config("environment.value");
@@ -82,12 +87,17 @@ class Base extends Controller
             throw new Exception("session config error!");
             // return false;
         }
+        // trace(["sessionInit" => time(), 'self::$sessionInitFlag' => self::$sessionInitFlag], 'error');
 
         try {
-            Session::init($sessionConfig);
+            if (!self::$sessionInitFlag)
+                Session::init($sessionConfig);
+
+            self::$sessionInitFlag = true;
         } catch (Exception $e) {
             trace(["Session Init error" => $e->getMessage()], "error");
         }
+
         return true;
     }
 }
