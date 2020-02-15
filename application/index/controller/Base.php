@@ -5,7 +5,6 @@ namespace app\index\controller;
 use think\Controller;
 use think\Exception;
 use think\Session;
-use think\Config;
 
 // 引入类库
 
