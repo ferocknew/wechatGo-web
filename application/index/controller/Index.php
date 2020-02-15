@@ -9,13 +9,16 @@ class Index extends Base
     public function _initialize()
     {
         parent::_initialize();
+        checkAuth();
     }
 
     public function index()
     {
-
-        // $this->checkWxAuto();
-
         return $this->fetch('index');
+    }
+
+    public function tClear()
+    {
+        \think\session::clear();
     }
 }

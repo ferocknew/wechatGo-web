@@ -147,19 +147,12 @@ class Wechat extends Base
         }
     }
 
-    public function getOpenId()
-    {
-        $this->oauth();
-    }
-
-
     public function oauth()
     {
-        $request = \think\Request::instance();
 
         $this->config['oauth'] = [
             'scopes' => ['snsapi_userinfo'],
-            'callback' => $request->domain() . '/index/Wechat/oauthCallback',
+            'callback' => request()->domain() . '/index/Wechat/oauthCallback',
         ];
 
         $app = Factory::officialAccount($this->config);
@@ -171,32 +164,36 @@ class Wechat extends Base
 
     public function oauthCallback()
     {
+        if (!empty(session('user')) || (!empty(self::$get['code']) && self::$get['code'] == session('wx_code'))) {
+            header('location:' . request()->domain());die();
+        }
+
         $app = Factory::officialAccount($this->config);
         $oauth = $app->oauth;
         $user = $oauth->user();
 
+        session('wx_code', self::$get['code']);
+
         trace($user->toArray());
 
         $modelUserInfo = new UserInfo;
-        // 这个逻辑也放到 model ，只需暴露一个fn 出来就行了，controller 不要放任何数据操作。
-        $userInfo = $modelUserInfo->where('open_id', $user->getId())->find();
+        $userInfo = $modelUserInfo->getUserInfo($user->getId());
 
         $data = [
-            'wx_appid' => $this->config['app_id'],
-            'open_id' => $user->getId(),
+            'user_id'   => $userInfo['id'],
+            'wx_appid'  => $this->config['app_id'],
+            'open_id'   => $user->getId(),
             'wx_nickname' => $user->getNickname(),
             'user_avatar' => $user->getAvatar(),
         ];
 
         if ($userInfo == null) {
-            $userInfo->addUser($data);
+            $modelUserInfo->addUser($data);
         } else {
-            $userInfo->updateUserInfo($data, $userInfo->id);
+            $modelUserInfo->updateUserInfo($data, $userInfo['id']);
         }
 
         session('user', $data);
-
-        // $request = \think\Request::instance();
 
         header('location:' . request()->domain());
     }
@@ -215,5 +212,14 @@ class Wechat extends Base
             return $sessionValue;
         }
 
+    }
+    // 微信服务器验证
+    public function server()
+    {
+        $app = Factory::officialAccount($this->config);
+
+        $response = $app->server->serve();
+
+        $response->send();exit; 
     }
 }

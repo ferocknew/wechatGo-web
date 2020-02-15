@@ -33,8 +33,11 @@ class Base extends Controller
         self::$cm = config("common");
         self::$configPath = CONF_PATH . DS . 'extra' . DS . self::$m . DS;
 
-        $sessionConfig = \think\Config::parse(self::$configPath . 'session_config.ini', 'ini')['session_config'];
-        $this->sessionInit($sessionConfig);
+        if (!isset($_SESSION)) {
+            $sessionConfig = \think\Config::parse(self::$configPath . 'session_config.ini', 'ini')['session_config'];
+            $this->sessionInit($sessionConfig);
+        }
+
         $moduleName = request()->module();
         Session::prefix($moduleName);
 

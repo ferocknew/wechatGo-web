@@ -18,12 +18,23 @@ class UserInfo extends Base
 
     public function addUser($data)
     {
-        // return $this->allowField(['open_id', 'wx_nickname', 'user_avatar', 'wx_appid'])->save($data);
+        return self::$mydb->name('user_info')->insert([
+            'open_id'       => $data['open_id'],
+            'wx_nickname'   => $data['wx_nickname'],
+            'user_avatar'   => $data['user_avatar'],
+            'wx_appid'      => $data['wx_appid']
+        ]);
     }
 
     public function updateUserInfo($data, $id)
     {
-        // return $this->allowField(['wx_nickname', 'user_avatar', 'wx_appid'])->save($data, ['id' => $id]);
+        return self::$mydb->name('user_info')
+            ->where('id', $id)
+            ->update([
+                'wx_nickname'   => $data['wx_nickname'],
+                'user_avatar'   => $data['user_avatar'],
+                'wx_appid'      => $data['wx_appid'],
+            ]);
     }
 
     public function getUserInfo($openId = '')
