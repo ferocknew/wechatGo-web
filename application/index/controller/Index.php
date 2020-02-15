@@ -16,10 +16,16 @@ class Index extends Base
 
     public function index()
     {
+        return "index";
+    }
+
+    public function addTasks()
+    {
         $this->eventWeChat = new \app\index\event\Wechat();
         $this->eventWeChat->checkAuth();
         return $this->fetch('index');
     }
+
 
     public function tClear()
     {

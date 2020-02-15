@@ -13,7 +13,7 @@ class Base extends controller\Base
 
     public function _initialize()
     {
-        controller\Base::_initialize();
+        // controller\Base::_initialize();
     }
 
 
