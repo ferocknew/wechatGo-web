@@ -2,5 +2,5 @@
 /.vscode
 *.log
 .env
-*.ini
+
 application/extra/environment.php
